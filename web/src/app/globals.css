@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+
+    --primary: 0 0% 12%;
+    --primary-foreground: 0 0% 92%;
+
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 224 71.4% 4.1%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 210 20% 98%;
+    --primary-foreground: 220.9 39.3% 11%;
+
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 216 12.2% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.iridescent {
+  background: linear-gradient(
+      269.96deg,
+      rgba(243, 184, 216, 0.7) -42.8%,
+      rgba(183, 147, 233, 0.7) -24.03%,
+      rgba(159, 212, 243, 0.7) -5.26%,
+      rgba(255, 210, 196, 0.7) 13.51%,
+      rgba(251, 243, 243, 0.7) 32.28%,
+      rgba(217, 171, 223, 0.7) 51.05%,
+      rgba(175, 156, 227, 0.7) 69.82%,
+      rgba(170, 228, 225, 0.7) 88.59%,
+      rgba(198, 234, 208, 0.7) 107.36%,
+      rgba(255, 255, 255, 0.7) 126.13%,
+      rgba(253, 181, 228, 0.7) 144.9%
+    ),
+    linear-gradient(0deg, #ebebeb, #ebebeb);
+}
+
+.iridescent-text {
+  background: linear-gradient(
+      269.96deg,
+      rgba(243, 184, 216, 0.7) -42.8%,
+      rgba(183, 147, 233, 0.7) -24.03%,
+      rgba(159, 212, 243, 0.7) -5.26%,
+      rgba(255, 210, 196, 0.7) 13.51%,
+      rgba(251, 243, 243, 0.7) 32.28%,
+      rgba(217, 171, 223, 0.7) 51.05%,
+      rgba(175, 156, 227, 0.7) 69.82%,
+      rgba(170, 228, 225, 0.7) 88.59%,
+      rgba(198, 234, 208, 0.7) 107.36%,
+      rgba(255, 255, 255, 0.7) 126.13%,
+      rgba(253, 181, 228, 0.7) 144.9%
+    ),
+    linear-gradient(0deg, #ebebeb, #ebebeb);
+
+  background-clip: text;
+  -webkit-background-clip: text; /* For older browsers */
+
+  text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.iridescent-blur {
+  background: linear-gradient(
+    269.96deg,
+    rgba(243, 184, 216, 0.7) -42.8%,
+    rgba(183, 147, 233, 0.7) -24.03%,
+    rgba(159, 212, 243, 0.7) -5.26%,
+    rgba(255, 210, 196, 0.7) 13.51%,
+    rgba(251, 243, 243, 0.7) 32.28%,
+    rgba(217, 171, 223, 0.7) 51.05%,
+    rgba(175, 156, 227, 0.7) 69.82%,
+    rgba(170, 228, 225, 0.7) 88.59%,
+    rgba(198, 234, 208, 0.7) 107.36%,
+    rgba(255, 255, 255, 0.7) 126.13%,
+    rgba(253, 181, 228, 0.7) 144.9%
+  );
+  mix-blend-mode: darken;
+  filter: blur(100px);
+}
+
+.shine {
+  background: linear-gradient(
+      303.31deg,
+      rgba(30, 30, 30, 0.5) 11.89%,
+      rgba(138, 138, 138, 0.5) 42.34%,
+      rgba(109, 109, 109, 0.5) 55.02%,
+      rgba(14, 14, 14, 0.5) 69.4%,
+      rgba(30, 30, 30, 0.5) 93.08%
+    ),
+    linear-gradient(0deg, #1e1e1e, #1e1e1e);
+  background-size: 400% 400%;
+  overflow: hidden;
+  animation: TransitioningBackground 3s ease infinite;
+}
+
+@keyframes TransitioningBackground {
+  0% {
+    background-position: 1% 0%;
+  }
+  50% {
+    background-position: 99% 100%;
+  }
+  100% {
+    background-position: 1% 0%;
+  }
+}
+
+.less-iridescent {
+  background: linear-gradient(
+      269.96deg,
+      rgba(243, 184, 216, 0.4) -42.8%,
+      rgba(183, 147, 233, 0.4) -24.03%,
+      rgba(159, 212, 243, 0.4) -5.26%,
+      rgba(255, 210, 196, 0.4) 13.51%,
+      rgba(251, 243, 243, 0.4) 32.28%,
+      rgba(217, 171, 223, 0.4) 51.05%,
+      rgba(175, 156, 227, 0.4) 69.82%,
+      rgba(170, 228, 225, 0.4) 88.59%,
+      rgba(198, 234, 208, 0.4) 107.36%,
+      rgba(255, 255, 255, 0.4) 126.13%,
+      rgba(253, 181, 228, 0.4) 144.9%
+    ),
+    linear-gradient(0deg, #ebebeb, #ebebeb);
+}
+
+div[data-radix-popper-content-wrapper] {
+  z-index: 10 !important;
+}

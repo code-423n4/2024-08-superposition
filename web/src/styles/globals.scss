@@ -1,0 +1,16 @@
+body {
+  all: unset;
+  background-color: $light;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+button {
+  all: unset;
+}
+
+a {
+  all: unset;
+}
+
+div[data-radix-popper-content-wrapper] { z-index: 10 !important; }

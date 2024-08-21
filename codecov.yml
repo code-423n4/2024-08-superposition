@@ -1,0 +1,25 @@
+codecov:
+  ignore:
+    - "cmd/faucet.superposition/graph/generated.go"
+    - "cmd/faucet.superposition/graph/mocked.go"
+    - "cmd/faucet.superposition/graph/model/models_gen.go"
+    - "cmd/faucet.superposition/graph/resolver.go"
+    - "cmd/faucet.superposition/graph/schema.resolvers.go"
+    - "cmd/faucet.superposition/tools.go"
+    - "cmd/graphql.ethereum/graph/generated.go"
+    - "cmd/graphql.ethereum/graph/mocked.go"
+    - "cmd/graphql.ethereum/graph/model/models_gen.go"
+    - "cmd/graphql.ethereum/graph/resolver.go"
+    - "cmd/graphql.ethereum/graph/schema.resolvers.go"
+    - "cmd/graphql.ethereum/tools.go"
+
+  coverage:
+    status:
+      project:
+        default:
+          target: auto
+          threshold: 1%
+          base: auto
+          branches:
+            - development
+          if_ci_failed: error

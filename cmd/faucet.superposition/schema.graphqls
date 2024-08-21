@@ -1,0 +1,26 @@
+
+type Mutation {
+  """
+  Request tokens, with information on the IP address and the requesting address being
+  collected with X-Forwarded-For and tracked in the database. Sends SPN token at the
+  expense of the faucet.
+  """
+  requestTokens(
+    """
+    Wallet address to use to request the tokens for.
+    """
+    wallet: String!,
+
+    """
+    Cloudflare token to request from the faucet with.
+    """
+    turnstileToken: String!
+  ): String!
+}
+
+type Query {
+  """
+  Request a healthcheck status update, including whatever's on the internal queue.
+  """
+  healthcheck: Int!
+}

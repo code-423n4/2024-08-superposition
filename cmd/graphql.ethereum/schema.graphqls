@@ -1,0 +1,787 @@
+
+type Query {
+
+  """
+  Metadata of the current request.
+  """
+  served: Served!
+
+  """
+  fUSDC address that's supported by the AMM.
+  """
+  fusdc: Token!
+
+  """
+  Pools available in the AMM.
+  """
+  pools: [SeawaterPool!]!
+
+  """
+  Campaigns actively running with Leo on Longtail pools.
+  """
+  activeLiquidityCampaigns: [LiquidityCampaign!]!
+
+  """
+  Campaigns slated to begin with Leo with Longtail pools in the future.
+  """
+  upcomingLiquidityCampaigns: [LiquidityCampaign!]!
+
+  """
+  Get a pool using the address of token1 that's in the pool.
+
+  Follows the same caching behaviour as the pools endpoint.
+  """
+  getPool(
+    """
+    Token address to use to scan for to get the pool.
+    """
+    token: String!
+  ): SeawaterPool
+
+  """
+  Get pool positions using the address of the pool involved.
+  """
+  getPoolPositions(
+    """
+    Pool address to scan for.
+    """
+    pool: String!,
+    """
+    How many records to return from the query.
+    """
+    first: Int,
+    """
+    Where to start after based on the position id.
+    """
+    after: Int
+  ): SeawaterPositionsGlobal!
+
+  """
+  Get positions that're owned by any pool using it's ID, based on what's known to the database.
+  """
+  getPosition(
+    """
+    Position ID to look up for when finding this position.
+    """
+    id: Int!
+  ): SeawaterPosition
+
+  """
+  Get positions that're owned by a specific wallet.
+  """
+  getPositions(
+    """
+    Wallet of the user to position owner to look up.
+    """
+    wallet: String!,
+    """
+    How many records to return from the query.
+    """
+    first: Int,
+    """
+    Where to start after based on the position id.
+    """
+    after: Int
+  ): SeawaterPositionsUser!
+
+  """
+  Get wallet information based on information including balances. SHOULD NOT be used to get
+  information that's needed consistently. Use the frontend instead after getting addresess
+  elsewhere.
+  """
+  getWallet(
+    """
+    Address of the wallet holder to use.
+    """
+    address: String!
+  ): Wallet
+
+  """
+  Get swaps made using a pool. Safe to use to get up to date information on swaps going
+  through the UI.
+  """
+  getSwaps(
+    """
+    Pool to scan for swaps from.
+    """
+    pool: String!,
+    """
+    How many records to return from the query.
+    """
+    first: Int,
+    """
+    Where to start after based on the position id.
+    """
+    after: Int
+  ): GetSwaps!
+
+  """
+  Get swaps for a user across every pool we track.
+  """
+  getSwapsForUser(
+    """
+    Wallet of the pool owner to scan for.
+    """
+    wallet: String!,
+    """
+    How many records to return from the query.
+    """
+    first: Int,
+    """
+    Where to start after based on the position id.
+    """
+    after: Int
+  ): GetSwapsForUser!
+
+  """
+  Get a Thirdweb smart account with the owner address given.
+  """
+  getSmartAccount(
+      """
+      Wallet to use as the owner.
+      """
+      wallet: String!
+  ): [Wallet!]!
+}
+
+"""
+Seawater pool available for swapping via the AMM.
+"""
+type SeawaterPool {
+  """
+  Metadata of the current request.
+  """
+  served: Served!
+
+  """
+  Id for quick caching, in the form of `pool:address`.
+  """
+  id: ID!
+
+  """
+  Pool fee, that taken every trade.
+  """
+  fee: Int!
+
+  """
+  Address of the pool, and of the token that's traded.
+  """
+  address: String!
+
+  """
+  Tick spacing of the current pool, useful for graph rendering.
+  """
+  tickSpacing: String!
+
+  """
+  More token information about the counter asset that's available.
+  """
+  token: Token!
+
+  """
+  Information on the current price, last cached. Determined by the last tick of a trade
+  that was made.
+  """
+  price: String!
+
+  """
+  Historical price over time data that's available.
+  """
+  priceOverTime: PriceOverTime!
+
+  """
+  The number of assets that were traded (the volume) over time in the pool, historically.
+  """
+  volumeOverTime: VolumeOverTime!
+
+  """
+  The number of assets (the liquidity) that were kept in the pool, historically.
+  """
+  liquidityOverTime: LiquidityOverTime!
+
+  """
+  The USD value of assets in the pool over time. Cheaper to access than liquidityOverTime.
+  """
+  tvlOverTime: TvlOverTime!
+
+  """
+  Yield paid by the pool over time. Yield is fees paid to the pool via fees taken.
+  """
+  yieldOverTime: YieldOverTime!
+
+  """
+  TODO
+  """
+  earnedFeesAPRFUSDC: [String!]!
+
+  """
+  TODO
+  """
+  earnedFeesAPRToken1: [String!]!
+
+  """
+  Liquidity campaigns currently available for this pool.
+  """
+  liquidityCampaigns: [LiquidityCampaign!]!
+
+  """
+  Positions available in this pool. Cached aggressively.
+  """
+  positions(first: Int, after: Int): SeawaterPositionsGlobal!
+
+  """
+  Positions available in this pool, that were created by the wallet given. Not so cached.
+  """
+  positionsForUser(wallet: String!, first: Int, after: Int): SeawaterPositionsUser!
+
+  """
+  Liquidity available in a pool, with only 20 elements being returned encompassing the
+  tick ranges subdivided.
+  """
+  liquidity: [SeawaterLiquidity!]!
+
+  """
+  Swaps that were made using this pool.
+  """
+  swaps(first: Int, after: Int): SeawaterSwaps!
+
+  """
+  Amounts currently contained in this pool.
+  """
+  amounts: PairAmount!
+
+  """
+  Configuration details available to this pool. Should be mostly static. This is displayed
+  to the frontend. Can be used to hint how the display of the tick selection should work.
+  """
+  config: SeawaterConfig!
+}
+
+type Served {
+  """
+  Timestamp of the creation of the served request.
+  """
+  timestamp: Int!
+}
+
+"""
+Get swaps for user return type, set up to allow better control of caching.
+"""
+type GetSwapsForUser {
+  data: SeawaterSwaps!
+}
+
+"""
+Get swaps for a specific pool, set up to be more granular for caching.
+"""
+type GetSwaps {
+  data: SeawaterSwaps!
+}
+
+"""
+Pagination-friendly way to quickly receive swaps made somewhere. Knows internally where it
+came from, where it's at with pagination with the position ids.
+"""
+type SeawaterSwaps {
+  """
+  The sum of these value in these swaps per unique pool, if possible to collect.
+  """
+  sum: [PairAmount!]
+
+  """
+  The swaps that was returned in this page.
+  """
+  swaps: [SeawaterSwap!]!
+
+  next(
+    """
+    The number fields to display from the current page.
+    """
+    first: Int
+  ): SeawaterSwaps!
+}
+
+"""
+Pagination-friendly way of viewing the current state of the positions available in a pool.
+Cached aggressively.
+"""
+type SeawaterPositionsGlobal {
+  """
+  ID available for this for caching reasons. Should be posglobal:from:to.
+  """
+  id: ID!
+
+  """
+  The positions associated with this data.
+  """
+  positions: [SeawaterPosition!]!
+
+  """
+  The maximum returned by the underlying original query for this data if it's possible to
+  collect for fUSDC and the other token, done per unique token.
+  """
+  sum: [PairAmount!]
+
+  next(
+    """
+    The next number of fields to display from the current position.
+    """
+    first: Int
+  ): SeawaterPositionsGlobal!
+}
+
+"""
+Pagination-friendly way of viewing the current state of the positions available in a pool.
+Not cached so aggressively!
+"""
+type SeawaterPositionsUser {
+  """
+  ID available for this for caching reasons. Should be posuser:from:to.
+  """
+  id: ID!
+
+  """
+  The positions associated with this data.
+  """
+  positions: [SeawaterPosition!]!
+
+  """
+  The maximum returned by the underlying original query for this data if it's possible to
+  collect for fUSDC and the other token, done per unique token.
+  """
+  sum: [PairAmount!]
+
+  next(
+    """
+    The next number of fields to display from the current position.
+    """
+    first: Int
+  ): SeawaterPositionsUser!
+}
+"""
+Volume that was made in the pool over time, in a daily and monthly metric.
+"""
+type VolumeOverTime {
+  """
+  Daily volume for a month.
+  """
+  daily: [PairAmount!]!
+
+  """
+  Monthly volume for the last 12 months.
+  """
+  monthly: [PairAmount!]!
+}
+
+"""
+TVL over time available in the pool, in the form of just the USD amount, if the client is
+so inclined to request this data.
+
+LiquidityOverTime is also possible to use, but it's more involved to calculate the USD
+amount per token (by adding PairAmounts together). This is simpler, and faster.
+"""
+type TvlOverTime {
+  """
+  A month's worth of TVL data in the form of a stringified floating point number (31
+  items.)
+  """
+  daily: [String!]!
+
+  """
+  Monthly data of the TVL, of the last 12 months, in the form of 12 items. Stringified
+  floating point representation of the amount.
+  """
+  monthly: [String!]!
+}
+
+"""
+Liquidity over time available in the pool, in the form of PairAmount, so it's possible to
+know which side is how much. More expensive to compute so it's preferable to use
+TvlOverTime if possible, where the USD calculation is done already.
+"""
+type LiquidityOverTime {
+  """
+  Daily liquidity in the pool, with data available as both sides.
+  """
+  daily: [PairAmount!]!
+
+  """
+  Monthly amounts of liquidity in the pool, as 12 data points.
+  """
+  monthly: [PairAmount!]!
+}
+
+"""
+Yield that was paid to users in the form of fees in the pool, and amounts that were paid
+by the Fluidity worker.
+"""
+type YieldOverTime {
+  """
+  Daily yield paid out, as 31 action points to represent a month.
+  """
+  daily: [PairAmount!]!
+
+  """
+  Monthly yield paid, as 12 item points of data to represent a year.
+  """
+  monthly: [PairAmount!]!
+}
+
+"""
+Price over time in the pool, from the checkpointed data available.
+"""
+type PriceOverTime {
+  """
+  Daily price each day that was available. As 31 points of data, each representing a day.
+  """
+  daily: [String!]!
+
+  """
+  Monthly price of data that's available, as 12 data points, each being a month.
+  """
+  monthly: [String!]!
+}
+
+"""
+SeawaterLiquidity available in a pool summed and grouped by ticks of 5000 at a time.
+"""
+type SeawaterLiquidity {
+  """
+  Id internal to GraphQL for caching reasons. Made up of `liq:tick-from:tick-to`.
+  """
+  id: ID!
+
+  """
+  Lower tick that this group and sum of positions is made up of.
+  """
+  tickLower: Int!
+
+  """
+  Upper tick that this group and sum of positions is made up of.
+  """
+  tickUpper: Int!
+
+  """
+  Median point price of token1's asset.
+  """
+  price: String!
+
+  """
+  USD value of the liquidity in this range. Implemented as amount0 + (amount1 * price).
+  """
+  liquidity: String!
+}
+
+"""
+SeawaterPosition owned by a user. It should be possible to derive the price of this
+position by looking at the median of the lower, and upper tick.
+"""
+type SeawaterPosition {
+  """
+  Metadata of the current request.
+  """
+  served: Served!
+
+  """
+  Id of the GraphQL object, for caching reasons. Made up of `positionId (pos:positionId)`.
+  """
+  id: ID!
+
+  """
+  Creation timestamp of the position.
+  """
+  created: Int!
+
+  """
+  Position Id in the contract of the user's position that they own. Used for a cursor.
+  """
+  positionId: Int!
+
+  """
+  Owner of the position. A wallet address.
+  """
+  owner: Wallet!
+
+  """
+  Pool that this position belongs to.
+  """
+  pool: SeawaterPool!
+
+  """
+  Lower tick of this position.
+  """
+  lower: Int!
+
+  """
+  Upper tick of this position.
+  """
+  upper: Int!
+
+  """
+  Liquidity available in this specific position.
+  """
+  liquidity: PairAmount!
+}
+
+"""
+Swap that was made by a user.
+"""
+type SeawaterSwap {
+  """
+  Metadata of the current request.
+  """
+  served: Served!
+
+  """
+  Timestamp of when this swap occured.
+  """
+  timestamp: Int!
+
+  """
+  Pool that was used to make the swap.
+  """
+  pool: SeawaterPool!
+
+  """
+  Transaction hash swap is operated on.
+  """
+  transactionHash: String!
+
+  """
+  Sender of the swap.
+  """
+  sender: Wallet!
+
+  """
+  The asset and volume that was sent to be exchanged for the other asset.
+  """
+  amountIn: Amount!
+
+  """
+  The asset and volume that was exchanged for by the other asset.
+  """
+  amountOut: Amount!
+}
+
+enum SeawaterPoolClassification {
+  STABLECOIN
+  VOLATILE
+  UNKNOWN
+}
+
+"""
+SeawaterConfig available to the pool.
+"""
+type SeawaterConfig {
+  """
+  Identifier of this config. Should be config:<pool address>
+  """
+  id: ID!
+
+  """
+  Pool this configuration belongs to.
+  """
+  pool: SeawaterPool!
+
+  """
+  Whether this pool should be displayed to frontend users.
+  """
+  displayed: Boolean!
+
+  """
+  Classification of the type of pool. Non-volatile assets like stablecoins (`STABLECOIN`)
+  should have a range of -10%-10% suggested to the user for the pool, volatile assets
+  (`VOLATILE`) should have a suggestion based on the historical trading data in the
+  backend, with the lowest price in the last 7 days, and the highest price, and an extra
+  5%. Unclear assets (`UNKNOWN`) should avoid these recommendations altogether, and only
+  allow the user to submit their price ranges without intervention.
+  """
+  classification: SeawaterPoolClassification!
+}
+
+"""
+Pair amount, with the USD value that's available within determined at the timestamp given.
+The backend will make an effort seemingly at random to keep this consistent.
+
+If this is a PairAmount returned in the context of a historical query (values over time?),
+then it'll return the timestamp of the time that this number was relevant (ie, if the
+volume over time calculation has been done, then it'll return the volume in USD at the
+time that the calculation for the day was done)).
+
+If this is a more current request, like the current USD value of a position, then the
+backend will attempt to convert it based on the last price point available in the
+checksumming in the database. So this could be useful to determine the current price data
+of a position.
+"""
+type PairAmount {
+  """
+  Timestamp of the PairAmount's existence/creation.
+  """
+  timestamp: Int!
+
+  """
+  Fusdc data available for the token at the time.
+  """
+  fusdc: Amount!
+
+  """
+  Token1 data (quote asset) that's available at that time.
+  """
+  token1: Amount!
+}
+
+"""
+Amount that was returned as a part of a PairAmount, a balance, or information on
+incentives. Follows the same timestamping behaviour for USD value like PairAmount.
+Contains information relevant to making contract and UI display decisions.
+"""
+type Amount {
+  """
+  Token that was traded as a part of this amount. This could be the base asset (fUSDC) or
+  the quote asset (token1).
+  """
+  token: Token!
+
+  """
+  Decimals of the token that was traded. Available for simplicity, and for the backend's
+  interaction with the scaling of the number.
+  """
+  decimals: Int!
+
+  """
+  Timestamp that this Amount was made available at.
+  """
+  timestamp: Int!
+
+  """
+  Hex representation of the unscaled number as it was available on-chain.
+  """
+  valueUnscaled: String!
+
+  """
+  Floating point representation of the number converted by it's decimals.
+  """
+  valueScaled: String!
+
+  """
+  USD representation of the underlying number, converted by the last price checkpoint.
+  """
+  valueUsd: String!
+}
+
+"""
+Wallet information as it's owned by a user.
+"""
+type Wallet {
+  """
+  Id for GraphQL caching. Simply the user's address.
+  """
+  id: ID!
+
+  """
+  Address of this wallet.
+  """
+  address: String!
+
+  """
+  Balances of tokens held by the user, based on information collected by the backend when
+  this is requested.
+  """
+  balances: [Amount!]!
+
+  """
+  Positions opened by the user in the AMM.
+  """
+  positions(first: Int, after: Int): SeawaterPositionsUser!
+}
+
+"""
+Token that's available to trade via the AMM.
+"""
+type Token {
+  """
+  A simple ID in the form of the address of the token for GraphQL caching.
+  """
+  id: ID!
+
+  """
+  Address of the token.
+  """
+  address: String!
+
+  """
+  Name of the token.
+  """
+  name: String!
+
+  """
+  Image of the token that's stored on a URL somewhere. Loaded from the browser.
+  """
+  image: String!
+
+  """
+  Total supply of the token, in the form of base10.
+  """
+  totalSupply: String!
+
+  """
+  Decimals used by the token.
+  """
+  decimals: Int!
+
+  """
+  Symbol of the token.
+  """
+  symbol: String!
+}
+
+"""
+Liquidity campaigns available in this pool that's distributed on-chain.
+"""
+type LiquidityCampaign {
+  """
+  Campaign ID to identify the campaign with a contract call.
+  """
+  campaignId: String!
+
+  """
+  Owner of the incentive campaign, they can pause, cancel, and update the campaigns.
+  """
+  owner: SeawaterPositionsUser!
+
+  """
+  Lower tick that this position incentivises.
+  """
+  tickLower: Int!
+
+  """
+  Upper tick that this position incentivises.
+  """
+  tickUpper: Int!
+
+  """
+  Amount of token that's released per second.
+  """
+  perSecond: Amount!
+
+  """
+  Maximum amount of the token that can be distributed over all time. The token that's sent
+  is contained within.
+  """
+  maximumAmount: Amount!
+
+  """
+  Timestamp that begins this liquidity mining campaign.
+  """
+  fromTimestamp: Int!
+
+  """
+  Timestamp that ends this liquidity mining campaign.
+  """
+  endTimestamp: Int!
+
+  """
+  Pool that these rewards are enabled for.
+  """
+  pool: SeawaterPool!
+}

@@ -1,0 +1,13 @@
+{
+  "name": "seawater-tests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@uniswap/permit2-sdk": "^1.2.0",
+    "ethers": "^6.13.1",
+    "tsx": "^3.13.0",
+    "typescript": "^5.2.2"
+  }
+}
