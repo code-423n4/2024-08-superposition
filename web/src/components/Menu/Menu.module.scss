@@ -1,0 +1,19 @@
+
+.Item {
+  position: relative;
+  z-index: 1;
+
+  &.selected {
+    * {
+      box-sizing: content-box;
+    }
+
+    &.light {
+      color: $light;
+    }
+
+    &.dark {
+      color: $dark;
+    }
+  }
+}

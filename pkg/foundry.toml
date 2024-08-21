@@ -1,0 +1,14 @@
+[profile.default]
+src = "sol"
+out = "out"
+libs = ["lib"]
+via_ir = true
+
+[doc]
+out = "docs-out"
+title = "Longtail AMM contracts docs"
+repository = "https://github.com/fluidity-money/long.so"
+
+revert-strings = "debug"
+
+remappings = ["@opensezppling/=lib/openzeppelin-contracts/"]

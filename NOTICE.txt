@@ -1,0 +1,19 @@
+
+# Attributions
+
+The following less-popular libraries are modified and used in this
+codebase:
+
+## 0xkitsune Uniswap math library
+
+This code makes heavy use of
+[0xkitsune](https://twitter.com/0xkitsune)'s Rust Uniswap maths code
+[uniswap-v3-math](https://github.com/0xKitsune/uniswap-v3-math).
+
+A reference for our use is mostly distributed in
+`pkg/seawater/tests/reference/`.
+
+## Uniswap V3
+
+Uniswap for open sourcing your ideas and code, and for popularising/inventing concentrated
+liquidity math.

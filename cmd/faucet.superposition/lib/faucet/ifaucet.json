@@ -1,0 +1,27 @@
+[
+	{
+		"type": "function",
+		"name": "sendTo",
+		"inputs": [
+			{
+				"name": "_requests",
+				"type": "tuple[]",
+				"internalType": "struct IFaucet.FaucetReq[]",
+				"components": [
+					{
+						"name": "recipient",
+						"type": "address",
+						"internalType": "address"
+					},
+					{
+						"name": "isStaker",
+						"type": "bool",
+						"internalType": "isStaker"
+					}
+				]
+			}
+		],
+		"outputs": [],
+		"stateMutability": "nonpayable"
+	}
+]

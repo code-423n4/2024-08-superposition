@@ -1,0 +1,305 @@
+[
+	{
+		"type": "event",
+		"name": "BurnPosition",
+		"inputs": [
+			{
+				"name": "id",
+				"type": "uint256",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"name": "owner",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			}
+		],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "CollectFees",
+		"inputs": [
+			{
+				"name": "id",
+				"type": "uint256",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"name": "pool",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "to",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "amount0",
+				"type": "uint128",
+				"indexed": false,
+				"internalType": "uint128"
+			},
+			{
+				"name": "amount1",
+				"type": "uint128",
+				"indexed": false,
+				"internalType": "uint128"
+			}
+		],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "CollectProtocolFees",
+		"inputs": [
+			{
+				"name": "pool",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "to",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "amount0",
+				"type": "uint128",
+				"indexed": false,
+				"internalType": "uint128"
+			},
+			{
+				"name": "amount1",
+				"type": "uint128",
+				"indexed": false,
+				"internalType": "uint128"
+			}
+		],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "MintPosition",
+		"inputs": [
+			{
+				"name": "id",
+				"type": "uint256",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"name": "owner",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "pool",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "lower",
+				"type": "int32",
+				"indexed": false,
+				"internalType": "int32"
+			},
+			{
+				"name": "upper",
+				"type": "int32",
+				"indexed": false,
+				"internalType": "int32"
+			}
+		],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "NewPool",
+		"inputs": [
+			{
+				"name": "token",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "fee",
+				"type": "uint32",
+				"indexed": true,
+				"internalType": "uint32"
+			},
+			{
+				"name": "decimals",
+				"type": "uint8",
+				"indexed": false,
+				"internalType": "uint8"
+			},
+			{
+				"name": "tickSpacing",
+				"type": "uint8",
+				"indexed": false,
+				"internalType": "uint8"
+			}
+		],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "Swap1",
+		"inputs": [
+			{
+				"name": "user",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "pool",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "zeroForOne",
+				"type": "bool",
+				"indexed": false,
+				"internalType": "bool"
+			},
+			{
+				"name": "amount0",
+				"type": "uint256",
+				"indexed": false,
+				"internalType": "uint256"
+			},
+			{
+				"name": "amount1",
+				"type": "uint256",
+				"indexed": false,
+				"internalType": "uint256"
+			},
+			{
+				"name": "finalTick",
+				"type": "int32",
+				"indexed": false,
+				"internalType": "int32"
+			}
+		],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "Swap2",
+		"inputs": [
+			{
+				"name": "user",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "from",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "to",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "amountIn",
+				"type": "uint256",
+				"indexed": false,
+				"internalType": "uint256"
+			},
+			{
+				"name": "amountOut",
+				"type": "uint256",
+				"indexed": false,
+				"internalType": "uint256"
+			},
+			{
+				"name": "fluidVolume",
+				"type": "uint256",
+				"indexed": false,
+				"internalType": "uint256"
+			},
+			{
+				"name": "finalTick0",
+				"type": "int32",
+				"indexed": false,
+				"internalType": "int32"
+			},
+			{
+				"name": "finalTick1",
+				"type": "int32",
+				"indexed": false,
+				"internalType": "int32"
+			}
+		],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "TransferPosition",
+		"inputs": [
+			{
+				"name": "from",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "to",
+				"type": "address",
+				"indexed": true,
+				"internalType": "address"
+			},
+			{
+				"name": "id",
+				"type": "uint256",
+				"indexed": true,
+				"internalType": "uint256"
+			}
+		],
+		"anonymous": false
+	},
+	{
+		"type": "event",
+		"name": "UpdatePositionLiquidity",
+		"inputs": [
+			{
+				"name": "id",
+				"type": "uint256",
+				"indexed": true,
+				"internalType": "uint256"
+			},
+			{
+				"name": "token0",
+				"type": "int256",
+				"indexed": false,
+				"internalType": "int256"
+			},
+			{
+				"name": "token1",
+				"type": "int256",
+				"indexed": false,
+				"internalType": "int256"
+			}
+		],
+		"anonymous": false
+	}
+]

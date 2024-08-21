@@ -1,0 +1,29 @@
+{
+  "root": true,
+  "extends": [
+    "next/core-web-vitals",
+    "prettier",
+    "plugin:tailwindcss/recommended"
+  ],
+  "plugins": ["@stylistic/ts"],
+  "parser": "@typescript-eslint/parser",
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "processor": "@graphql-eslint/graphql"
+    },
+    {
+      "files": ["*.graphql"],
+      "parser": "@graphql-eslint/eslint-plugin",
+      "plugins": ["@graphql-eslint"]
+    },
+    {
+      "files": "__tests__/**",
+      "extends": "plugin:jest/recommended"
+    },
+    {
+      "files": "e2e/**",
+      "extends": "plugin:playwright/recommended"
+    }
+  ]
+}

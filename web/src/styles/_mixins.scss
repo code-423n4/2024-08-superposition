@@ -1,0 +1,16 @@
+@use './variables' as *;
+
+@mixin box($size) {
+  border-radius: $size;
+  padding: calc($size * 1.5);
+}
+
+@mixin light {
+  background-color: $light;
+  color: $dark;
+}
+
+@mixin dark {
+  background-color: $dark;
+  color: $light;
+}

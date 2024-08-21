@@ -1,0 +1,5 @@
+pkg/target
+pkg/*.wasm
+pkg/out
+pkg/*.rlib
+Dockerfile.*

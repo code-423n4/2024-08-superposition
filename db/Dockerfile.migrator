@@ -1,0 +1,16 @@
+
+FROM alpine:3.19
+
+RUN apk add make curl
+
+RUN curl -fsSLo \
+	/usr/local/bin/dbmate \
+	https://github.com/amacneil/dbmate/releases/latest/download/dbmate-linux-amd64
+
+RUN chmod +x /usr/local/bin/dbmate
+
+COPY migrations/ .
+
+ENV SPN_TIMESCALE_URL ${SPN_TIMESCALE_URL}
+
+ENTRYPOINT dbmate -u "$SPN_TIMESCALE_URL" -d migrations up

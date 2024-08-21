@@ -1,0 +1,10 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc fe5a52213d41ecb0374a41465cb052fcacce009dded2e7ebc642562500f2a72e # shrinks to min_tick = 0, upper_tick = 0, amount = 0
+cc 55862e4d8b70213220193c86c09be88b60bdc84b634a39b96346213d5b6218c6 # shrinks to sqrt_price_a_x_96_1 = 4294805859, sqrt_price_a_x_96_2 = 0, sqrt_price_b_x_96_1 = 4294805859, sqrt_price_b_x_96_2 = 1, amount = 1
+cc cfec802a992bd17661cbfe36ecafccf10d4255f85715f0f0b273d25f69cdff72 # shrinks to sqrt_price_a_x_96_1 = 4295128739, sqrt_price_a_x_96_2 = 3262002644, sqrt_price_b_x_96_1 = 4295128739, sqrt_price_b_x_96_2 = 3256827109, amount = 410048128078263078467202489002229760
+cc 3d0f813f67d074ce9552dbe5751161c4dbffbc0ada9d8a2036e18b281d8f328e # shrinks to sqrt_price_a_x_96_1 = 4295128739, sqrt_price_a_x_96_2 = 168603492, sqrt_price_b_x_96_1 = 4295128739, sqrt_price_b_x_96_2 = 168052836, amount = 43627463057454743081910537516220416
