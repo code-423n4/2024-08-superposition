@@ -27,7 +27,15 @@ _Note for C4 wardens: Anything included in this `Automated Findings / Publicly K
 
 # Overview
 
-[ ⭐️ SPONSORS: add info here ]
+Longtail is a concentrated liquidity AMM powered by Arbitrum Stylus. Arbitrum Stylus is a WASM frontend to the EVM on Arbitrum.
+
+Longtail differs from a traditional V3 AMM in the following ways:
+
+1. 1 contract for everything: Liquidity is centralised in one contract.
+2. One shared asset between every pool: fUSDC is shared between every pool.
+3. Contract addresses are embedded in the compiled code: Contract addresses are set using environment variables.
+4. Native support for permit2: Permit2 is natively supported for a better UX.
+5. Diamond-like proxy for dispatch: A Solidity contract is used to delegatecall to different facets of the contract.
 
 ## Links
 
