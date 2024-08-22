@@ -157,11 +157,11 @@ N/A
 [ ⭐️ SPONSORS: please fill in the description here ]
 
 
-| Role                                    |     Description              |
-| --------------------------------------- | ---------------------------- |
-| Operator                                |                              |
-| Emergency Council                       |                              |
-| NFT manager                             |                              |
+| Role                                    |  Description                                                    |
+| --------------------------------------- | --------------------------------------------------------------- |
+| Operator                                | Controls access to the repo, and implementation addresses.      |
+| Emergency Council                       | Can shut the dapp down if needed.                               |
+| NFT manager                             | Allows addresses to control their ownership of assets as a NFT. |
 
 ## Describe any novel or unique curve logic or mathematical models implemented in the contracts:
 
