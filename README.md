@@ -1,6 +1,7 @@
 
 
 # Superposition audit details
+✅
 - Total Prize Pool: $60,750 in USDC
   - HM awards: $38,880 in USDC
   - QA awards: $1,620 in USDC 
@@ -46,14 +47,36 @@ _Note for C4 wardens: Anything included in this `Automated Findings / Publicly K
 ### Files in scope
 
 
-| File   | Logic Contracts | Interfaces | nSLOC |
-| ------ | --------------- | ---------- | ----- | 
-| /pkg/sol/OwnershipNFTs.sol | 1| **** | 90 |
-| /pkg/sol/SeawaterAMM.sol | 2| **** | 280 |
-| /pkg/seawater/src/main.rs | ****| **** | 8 |
-| /pkg/seawater/src/maths/mod.rs | ****| **** | 9 |
-| /pkg/seawater/src/lib.rs | ****| **** | 925 |
-| **Totals** | **3** | **** | **1312** | 
+✅
+| File                                      | SLOC |
+|-------------------------------------------|------|
+| pkg/seawater/src/maths/sqrt_price_math.rs | 1239 |
+| pkg/seawater/src/lib.rs                   |  925 |
+| pkg/sol/SeawaterAMM.sol                   |  396 |
+| pkg/seawater/src/wasm_erc20.rs            |  332 |
+| pkg/seawater/src/maths/swap_math.rs       | 316  |
+| pkg/seawater/src/tick.rs                  | 220  |
+| pkg/seawater/src/eth_serde.rs             | 219  |
+| pkg/seawater/src/maths/tick_math.rs       | 191  |
+| pkg/seawater/src/maths/bit_math.rs        | 138  |
+| pkg/seawater/src/error.rs                 | 133  |
+| pkg/sol/OwnershipNFTs.sol                 | 117  |
+| pkg/seawater/src/types.rs                 | 112  |
+| pkg/seawater/src/maths/full_math.rs       | 106  |
+| pkg/seawater/src/position.rs              | 91   |
+| pkg/seawater/src/host_erc20.rs            | 58   |
+| pkg/seawater/src/maths/tick_bitmap.rs     | 52   |
+| pkg/seawater/src/maths/liquidity_math.rs  | 37   |
+| pkg/seawater/src/immutables.rs            | 23   |
+| pkg/seawater/src/maths/utils.rs           | 11   |
+| pkg/seawater/src/maths/mod.rs             | 9    |
+| pkg/seawater/src/maths/unsafe_math.rs     | 9    |
+| pkg/seawater/src/main.rs                  | 8    |
+| pkg/seawater/src/permit2_types.rs         | 8    |
+| pkg/seawater/src/erc20.rs                 | 5    |
+| pkg/seawater/src/events.rs                | 3    |
+| **Total**                                 | **4758** |
+
 
 ### Files out of scope
 
