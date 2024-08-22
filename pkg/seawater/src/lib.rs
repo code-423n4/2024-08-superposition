@@ -54,7 +54,10 @@ use maths::tick_math;
 
 use types::{U256Extension, WrappedNative};
 
-use stylus_sdk::{evm, msg, prelude::*, storage::*};
+use stylus_sdk::{msg, prelude::*, storage::*};
+
+#[cfg(feature = "log-events")]
+use stylus_sdk::evm;
 
 #[allow(dead_code)]
 type RawArbResult = Option<Result<Vec<u8>, Vec<u8>>>;
@@ -146,7 +149,7 @@ impl Pools {
         price_limit_x96: U256,
         permit2: Option<Permit2Args>,
     ) -> Result<(I256, I256), Revert> {
-        let (amount_0, amount_1, ending_tick) =
+        let (amount_0, amount_1, _ending_tick) =
             pools
                 .pools
                 .setter(pool)
@@ -178,13 +181,14 @@ impl Pools {
             Error::SwapResultTooLow
         );
 
+        #[cfg(feature = "log-events")]
         evm::log(events::Swap1 {
             user: msg::sender(),
             pool,
             zeroForOne: zero_for_one,
             amount0: amount_0_abs,
             amount1: amount_1_abs,
-            finalTick: ending_tick,
+            finalTick: _ending_tick,
         });
 
         Ok((amount_0, amount_1))
@@ -270,9 +274,9 @@ impl Pools {
             original_amount,
             amount_in,
             amount_out,
-            interim_usdc_out,
-            final_tick_in,
-            final_tick_out,
+            _interim_usdc_out,
+            _final_tick_in,
+            _final_tick_out,
         ) = Self::swap_2_internal(pools, from, to, amount, min_out)?;
 
         #[cfg(feature = "testing-dbg")]
@@ -286,15 +290,16 @@ impl Pools {
         erc20::take(from, original_amount, permit2)?;
         erc20::transfer_to_sender(to, amount_out)?;
 
+        #[cfg(feature = "log-events")]
         evm::log(events::Swap2 {
             user: msg::sender(),
             from,
             to,
             amountIn: amount_in,
             amountOut: amount_out,
-            fluidVolume: interim_usdc_out.abs().into_raw(),
-            finalTick0: final_tick_in,
-            finalTick1: final_tick_out,
+            fluidVolume: _interim_usdc_out.abs().into_raw(),
+            finalTick0: _final_tick_in,
+            finalTick1: _final_tick_out,
         });
 
         // return amount - amount_in to the user
@@ -398,73 +403,57 @@ impl Pools {
 /// Swap functions using Permit2. Only enabled when the `swap_permit2` feature is set.
 #[cfg_attr(feature = "swap_permit2", external)]
 impl Pools {
-    // slight hack - we cfg out the whole function, since the `selector` and `raw` attributes don't
-    // actually exist, so we can't `cfg_attr` them in
     #[cfg(feature = "swap_permit2")]
-    #[selector(
-        id = "swapPermit2EE84AD91(address,bool,int256,uint256,uint256,uint256,uint256,bytes)"
-    )]
-    #[raw]
     #[allow(non_snake_case)]
-    pub fn swap_permit_2_E_E84_A_D91(&mut self, data: &[u8]) -> RawArbResult {
-        let (pool, data) = eth_serde::parse_addr(data);
-        let (zero_for_one, data) = eth_serde::parse_bool(data);
-        let (amount, data) = eth_serde::parse_i256(data);
-        let (price_limit_x96, data) = eth_serde::parse_u256(data);
-        let (nonce, data) = eth_serde::parse_u256(data);
-        let (deadline, data) = eth_serde::parse_u256(data);
-        let (max_amount, data) = eth_serde::parse_u256(data);
-        let (_, data) = eth_serde::take_word(data); // placeholder
-        let (sig, _) = eth_serde::parse_bytes(data);
-
+    pub fn swap_permit_2_E_E84_A_D91(
+        &mut self,
+        pool: Address,
+        zero_for_one: bool,
+        amount: I256,
+        price_limit_x96: U256,
+        nonce: U256,
+        deadline: U256,
+        max_amount: U256,
+        sig: Vec<u8>,
+    ) -> Result<(I256, I256), Revert> {
         let permit2_args = Permit2Args {
             max_amount,
             nonce,
             deadline,
-            sig,
+            sig: &sig,
         };
 
-        match Pools::swap_internal(
+        Pools::swap_internal(
             self,
             pool,
             zero_for_one,
             amount,
             price_limit_x96,
             Some(permit2_args),
-        ) {
-            Ok((a, b)) => Some(Ok([a.to_be_bytes::<32>(), b.to_be_bytes::<32>()].concat())),
-            Err(e) => Some(Err(e)),
-        }
+        )
     }
 
     /// Performs a two stage swap, using permit2 to transfer tokens. See [Self::swap_2_internal].
     #[cfg(feature = "swap_permit2")]
-    #[selector(
-        id = "swap2ExactInPermit236B2FDD8(address,address,uint256,uint256,uint256,uint256,bytes)"
-    )]
-    #[raw]
     #[allow(non_snake_case)]
-    pub fn swap_2_exact_in_permit_2_36_B2_F_D_D8(&mut self, data: &[u8]) -> RawArbResult {
-        let (from, data) = eth_serde::parse_addr(data);
-        let (to, data) = eth_serde::parse_addr(data);
-        let (amount, data) = eth_serde::parse_u256(data);
-        let (min_out, data) = eth_serde::parse_u256(data);
-        let (nonce, data) = eth_serde::parse_u256(data);
-        let (deadline, data) = eth_serde::parse_u256(data);
-        let (_, data) = eth_serde::take_word(data);
-        let (sig, _) = eth_serde::parse_bytes(data);
-
+    pub fn swap_2_exact_in_permit_2_36_B2_F_D_D8(
+        &mut self,
+        from: Address,
+        to: Address,
+        amount: U256,
+        min_out: U256,
+        nonce: U256,
+        deadline: U256,
+        sig: Vec<u8>,
+    ) -> Result<(U256, U256), Revert> {
         let permit2_args = Permit2Args {
             max_amount: amount,
             nonce,
             deadline,
-            sig,
+            sig: &sig,
         };
 
-        match Pools::swap_2_internal_erc20(self, from, to, amount, min_out, Some(permit2_args)) {
-            Ok((a, b)) => Some(Ok([a.to_be_bytes::<32>(), b.to_be_bytes::<32>()].concat())),
-            Err(e) => Some(Err(e)),
-        }
+        Pools::swap_2_internal_erc20(self, from, to, amount, min_out, Some(permit2_args))
     }
 }
 
@@ -518,6 +507,7 @@ impl Pools {
 
         self.grant_position(owner, id);
 
+        #[cfg(feature = "log-events")]
         evm::log(events::MintPosition {
             id,
             owner,
@@ -546,6 +536,7 @@ impl Pools {
 
         self.remove_position(owner, id);
 
+        #[cfg(feature = "log-events")]
         evm::log(events::BurnPosition { owner, id });
 
         Ok(())
@@ -571,6 +562,7 @@ impl Pools {
         self.remove_position(from, id);
         self.grant_position(to, id);
 
+        #[cfg(feature = "log-events")]
         evm::log(events::TransferPosition { from, to, id });
 
         Ok(())
@@ -631,6 +623,7 @@ impl Pools {
         let res = self.pools.setter(pool).collect(id)?;
         let (token_0, token_1) = res;
 
+        #[cfg(feature = "log-events")]
         evm::log(events::CollectFees {
             id,
             pool,
@@ -723,6 +716,7 @@ impl Pools {
             erc20::take(FUSDC_ADDR, token_1.abs_pos()?, permit_1)?;
         }
 
+        #[cfg(feature = "log-events")]
         evm::log(events::UpdatePositionLiquidity {
             id,
             token0: token_0,
@@ -757,6 +751,7 @@ impl Pools {
             giving,
         )?;
 
+        #[cfg(feature = "log-events")]
         evm::log(events::UpdatePositionLiquidity {
             id,
             token0: amount_0,
@@ -1021,12 +1016,13 @@ impl Pools {
 
         // get the decimals for the asset so we can log it's decimals for the indexer
 
-        let decimals = erc20::decimals(pool)?;
+        let _decimals = erc20::decimals(pool)?;
 
+        #[cfg(feature = "log-events")]
         evm::log(events::NewPool {
             token: pool,
             fee,
-            decimals,
+            decimals: _decimals,
             tickSpacing: tick_spacing,
         });
 
@@ -1153,6 +1149,7 @@ impl Pools {
         erc20::transfer_to_addr(recipient, pool, U256::from(token_0))?;
         erc20::transfer_to_addr(recipient, FUSDC_ADDR, U256::from(token_1))?;
 
+        #[cfg(feature = "log-events")]
         evm::log(events::CollectProtocolFees {
             pool,
             to: recipient,
