@@ -33,9 +33,9 @@ _Note for C4 wardens: Anything included in this `Automated Findings / Publicly K
 
 - **Previous audits:**  https://github.com/fluidity-money/long.so/tree/development/audits
 - **Documentation:** https://docs.long.so
-- **Website:** 
-- **X/Twitter:** 🐺 CA: add a link to the sponsor's Twitter
-- **Discord:** 🐺 CA: add a link to the sponsor's Discord
+- **Website:** https://superposition.so
+- **X/Twitter:** https://x.com/superpositionso
+- **Discord:** https://discord.gg/Xxa8H3tp
 
 ---
 
@@ -174,44 +174,20 @@ See [pkg/README](https://github.com/code-423n4/2024-08-superposition/blob/main/p
 
 
 
-First, run the nitro stylus node:
-```bash
-git clone https://github.com/OffchainLabs/nitro-testnode.git --recurse-submodules
-cd nitro-testnode
-git switch old-stylus
-./test-node.bash --init
-```
-
-One of the lines of the output should like like this, note the port number (8547 in our case)
->  HTTP server started                      endpoint=[::]:8547 auth=false prefix= cors=* vhosts=*
-
-
 Then run the following command:
 ```bash
 https://github.com/code-423n4/2024-08-superposition
 cd 2024-08-superposition/pkg
-
-export FLU_SEAWATER_FUSDC_ADDR="0x0000000000000000000000000000000000000aab" \
-    FLU_SEAWATER_PERMIT2_ADDR="0x0000000000000000000000000000000000000aaa" \
-     FLU_SEAWATER_ADDR="0x0000000000000000000000000000000000000aac" \
-    FLU_NFT_MANAGER_ADDR="0x0000000000000000000000000000000000000aad"
 rustup target add wasm32-unknown-unknown
 cargo install cargo-stylus
-make seawater
-# cargo install --force cargo-stylus-check
-./tests.sh # this would test the rust files
-
-yarn # or `npm i`
-export SPN_GETH_URL="http://localhost:8547" # if the stylus node is running on a different port, replace 8547 with the right port
-# this would test the solidity files
-node --test --import tsx ethers-tests/seawater.ts  
+./tests.sh # this would test the rust files from the files in `tests`.
 
 ```
 
 Some of the tests are expected to fail:
 1. `eli_incr_position` and `incr_position_fee_growth_tick` are issues that cropped up in production that we isolated by reproducing the remote state into our contracts. the production contract was deployed at one point with a change from the current version of this code that we believe may have contributed to causing this to happen.
 2. `ethers_suite_uniswap_orchestrated_uniswap_two` is possibly indicative of an issue. it needs investigation whether this is correct behaviour
-3. we left these tests for researchers to pore through and hopefully identify the root cause, the team hasn't succeeded so far.
+3. We left these tests for researchers to pore through and hopefully identify the root cause, the team hasn't succeeded so far.
 
 
 
