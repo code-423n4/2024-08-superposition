@@ -57,10 +57,11 @@ Longtail differs from a traditional V3 AMM in the following ways:
 
 | File                                      | SLOC |
 |-------------------------------------------|------|
+| pkg/sol/SeawaterAMM.sol                   |  396 |
+| pkg/sol/OwnershipNFTs.sol                 | 117  |
 | pkg/seawater/src/maths/sqrt_price_math.rs | 1239 |
 | pkg/seawater/src/lib.rs                   |  925 |
 | pkg/seawater/src/pool.rs                  | 490  |
-| pkg/sol/SeawaterAMM.sol                   |  396 |
 | pkg/seawater/src/wasm_erc20.rs            |  332 |
 | pkg/seawater/src/maths/swap_math.rs       | 316  |
 | pkg/seawater/src/tick.rs                  | 220  |
@@ -68,7 +69,6 @@ Longtail differs from a traditional V3 AMM in the following ways:
 | pkg/seawater/src/maths/tick_math.rs       | 191  |
 | pkg/seawater/src/maths/bit_math.rs        | 138  |
 | pkg/seawater/src/error.rs                 | 133  |
-| pkg/sol/OwnershipNFTs.sol                 | 117  |
 | pkg/seawater/src/types.rs                 | 112  |
 | pkg/seawater/src/maths/full_math.rs       | 106  |
 | pkg/seawater/src/position.rs              | 91   |
