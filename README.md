@@ -39,6 +39,7 @@ Longtail differs from a traditional V3 AMM in the following ways:
 
 ## Links
 
+- **Webapp** https://long.so
 - **Previous audits:**  https://github.com/fluidity-money/long.so/tree/development/audits
 - **Documentation:** https://docs.long.so
 - **Website:** https://superposition.so
