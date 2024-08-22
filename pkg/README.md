@@ -135,33 +135,11 @@ So these variables must set at compile-time, like so:
 
 ### Testing
 
-Testing is done either on-chain with the live Ethers-powered environment
-(at the time of writing, there is no native on-chain testing with a
-forking suite), or via a hosted test using cargo features with the
+Testing is done with via a hosted test using cargo features with the
 testing flag. `tests.sh` is provided to run both test suites.
 
-#### Testing dependencies
-
-|          Name           |                         Source                         |
-|-------------------------|--------------------------------------------------------|
-| Node                    | [Website](https://nodejs.org/en)                       |
-| NPM                     | [Website](https://www.npmjs.com/)                      |
-| Nitro testnode          | [Repo](https://github.com/OffchainLabs/nitro-testnode) |
-
-Testing the local environment using Ethers is the process of:
-
-1. Deploying a local Stylus testnode.
-2. Running the ethers test suite.
-
-Running the Ethers test suite is as simple as running `./tests.sh`,
-which will also run tests on the host environment with stubbed out ERC20.
-
-#### Running a local testnode
-
-1. Clone the [Nitro repo](https://github.com/OffchainLabs/nitro-testnode) with submodules
-on the `stylus` branch.
-2. Run the testing script `./test-node.bash --init`. This will run the Stylus suite using
-Docker Compose, and make it available locally.
+End to end testing is currently unavailable due to issues with the deployment
+toolchain.
 
 #### Testing process
 
