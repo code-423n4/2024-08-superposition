@@ -163,9 +163,6 @@ N/A
 
 ## All trusted roles in the protocol
 
-[ ⭐️ SPONSORS: please fill in the description here ]
-
-
 | Role                                    |  Description                                                    |
 | --------------------------------------- | --------------------------------------------------------------- |
 | Operator                                | Controls access to the repo, and implementation addresses.      |
