@@ -83,7 +83,6 @@
 ./pkg/leo/tests/lib.rs
 ./pkg/seawater/src/host_test_shims.rs
 ./pkg/seawater/src/host_test_utils.rs
-./pkg/seawater/src/pool.rs
 ./pkg/seawater/src/test_shims.rs
 ./pkg/seawater/src/test_utils.rs
 ./pkg/seawater/tests/lib.rs

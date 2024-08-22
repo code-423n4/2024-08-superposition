@@ -23,3 +23,4 @@
 ./pkg/seawater/src/erc20.rs
 ./pkg/seawater/src/error.rs
 ./pkg/seawater/src/permit2_types.rs
+./pkg/seawater/src/pool.rs

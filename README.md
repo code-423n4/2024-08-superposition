@@ -1,7 +1,6 @@
 
 
 # Superposition audit details
-✅
 - Total Prize Pool: $60,750 in USDC
   - HM awards: $38,880 in USDC
   - QA awards: $1,620 in USDC 
@@ -47,11 +46,11 @@ _Note for C4 wardens: Anything included in this `Automated Findings / Publicly K
 ### Files in scope
 
 
-✅
 | File                                      | SLOC |
 |-------------------------------------------|------|
 | pkg/seawater/src/maths/sqrt_price_math.rs | 1239 |
 | pkg/seawater/src/lib.rs                   |  925 |
+| pkg/seawater/src/pool.rs                  | 490  |
 | pkg/sol/SeawaterAMM.sol                   |  396 |
 | pkg/seawater/src/wasm_erc20.rs            |  332 |
 | pkg/seawater/src/maths/swap_math.rs       | 316  |
@@ -75,7 +74,7 @@ _Note for C4 wardens: Anything included in this `Automated Findings / Publicly K
 | pkg/seawater/src/permit2_types.rs         | 8    |
 | pkg/seawater/src/erc20.rs                 | 5    |
 | pkg/seawater/src/events.rs                | 3    |
-| **Total**                                 | **4758** |
+| **Total**                                 | **5248** |
 
 
 ### Files out of scope
@@ -93,7 +92,7 @@ Any file not listed in the table above.
 | Question                                | Answer                       |
 | --------------------------------------- | ---------------------------- |
 | ERC20 used by the protocol              |       Modern USDC (Arbitrum deployed)             |
-| Test coverage                           | ✅ SCOUTS: Please populate this after running the test coverage command                          |
+| Test coverage                           | N/A                          |
 | ERC721 used  by the protocol            |            None              |
 | ERC777 used by the protocol             |           None                |
 | ERC1155 used by the protocol            |              None            |
@@ -214,13 +213,6 @@ Some of the tests are expected to fail:
 2. `ethers_suite_uniswap_orchestrated_uniswap_two` is possibly indicative of an issue. it needs investigation whether this is correct behaviour
 3. we left these tests for researchers to pore through and hopefully identify the root cause, the team hasn't succeeded so far.
 
-
-To run code coverage
-```bash
-make coverage
-```
-
-✅ SCOUTS: Add a screenshot of your terminal showing the test coverage
 
 
 
