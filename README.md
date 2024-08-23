@@ -9,14 +9,12 @@
   - Validator awards: $3,500 USDC
   - Mitigation Review: $9,000 USDC (*Opportunity goes to top 3 backstage wardens based on placement in this audit who RSVP.*)
 - [Read our guidelines for more details](https://docs.code4rena.com/roles/wardens)
-- Starts August 22, 2024 20:00 UTC
-- Ends September 12, 2024 20:00 UTC
+- Starts August 23, 2024 20:00 UTC
+- Ends September 13, 2024 20:00 UTC
 
 ## Automated Findings / Publicly Known Issues
 
 The 4naly3er report can be found [here](https://github.com/code-423n4/2024-08-superposition/blob/main/4naly3er-report.md).
-
-
 
 _Note for C4 wardens: Anything included in this `Automated Findings / Publicly Known Issues` section is considered a publicly known issue and is ineligible for awards._
 
