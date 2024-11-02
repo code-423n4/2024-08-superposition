@@ -1,0 +1,526 @@
+==============================================================
+Guild: Code4rena
+Channel: ARCHIVE-PUBLIC / superposition-aug23
+==============================================================
+
+[08/02/2024 22:21] itsmetechjay
+⏳New audit coming. Details dropping 🪂 soon! 
+
+Please no questions or comments in this channel for now.
+
+{Reactions}
+🔥 (23) 
+
+[08/22/2024 14:42] kartoonjoy (pinned)
+👋 Hello and welcome to the audit channel for the **$60,750 in USDC Superposition** audit!
+
+📆 Audit opens 08/23/2024 20:00 (20:00 UTC) and runs through 09/13/2024 20:00 (20:00 UTC) (21 days).
+
+Please give a warm welcome to the Superposition team, particularly @bayge, who will be available for questions either here in the channel or via a PRIVATE thread in the ACST timezone(s). 
+
+🤖 **Documentation bot assistance:** For general questions about the codebase, give our documentation bot a try, by tagging `@Docs Wolf` in any thread (private or public) and asking your question. The bot will make its best attempt to answer based on the codebase and documentation, and link you to relevant resources.  
+
+We'll be posting relevant links, documentation, etc. here, so if you intend to participate in this audit, consider enabling notifications for this channel. 🐺 ⏰
+
+Audit Page: <https://code4rena.com/audits/2024-08-superposition#top>
+
+
+[08/22/2024 14:42] bayge
+hello! excited to be auditing with everyone. just ask if you have any questions! 👋
+
+{Reactions}
+👋 (12) 
+
+[08/22/2024 14:42] kartoonjoy
+Pinned a message.
+
+
+[08/22/2024 19:55] rabtai
+Welcome @bayge
+
+{Reactions}
+👋 
+
+[08/24/2024 06:19] bayge
+if anyone's interested, i just shared how the different features in the crate cause different entrypoints to the contract to be configured!
+
+
+[08/24/2024 06:19] bayge
+https://discord.com/channels/810916927919620096/1276736880158834789/1276787110124453919
+
+
+[08/24/2024 06:19] bayge
+this is also how the comments are applicable 🙂
+
+
+[08/24/2024 07:35] gulshn321
+unknown
+
+
+[08/24/2024 09:18] prapandey031
+It says i don't have access to the link
+Renders as "#unknown"
+
+
+[08/24/2024 09:20] rodiontrubnikov
+because it's a private thread
+
+
+[08/24/2024 09:33] bayge
+whoops. sorry guys
+
+
+[08/24/2024 09:33] bayge
+let me copy what i wrote
+
+
+[08/24/2024 09:33] bayge
+these features are separate contracts:
+```
+swaps = []
+swap_permit2 = []
+quotes = []
+positions = []
+update_positions = []
+admin = []
+migrations = []
+```
+
+
+[08/24/2024 09:33] bayge
+they are used to compile different implementations of `swap`. the `swaps` feature are these functions:
+```/// Swap functions. Only enabled when the `swaps` feature is set.
+#[cfg_attr(feature = "swaps", external)]
+impl Pools {
+    #[allow(non_snake_case)]
+    pub fn swap_904369_B_E(
+        &mut self,
+        pool: Address,
+        zero_for_one: bool,
+        amount: I256,
+        price_limit_x96: U256,
+    ) -> Result<(I256, I256), Revert> {
+        Pools::swap_internal(self, pool, zero_for_one, amount, price_limit_x96, None)
+    }
+
+    /// Performs a two stage swap, using approvals to transfer tokens. See [Self::swap_2_internal].
+    #[allow(non_snake_case)]
+    pub fn swap_2_exact_in_41203_F1_D(
+        &mut self,
+        from: Address,
+        to: Address,
+        amount: U256,
+        min_out: U256,
+    ) -> Result<(U256, U256), Revert> {
+        Pools::swap_2_internal_erc20(self, from, to, amount, min_out, None)
+    }
+}
+```
+
+
+[08/24/2024 09:34] bayge
+```    /// @notice swaps within a pool
+    /// @param pool the pool to swap on
+    /// @param zeroForOne true if swapping token->fluid token
+    /// @param amount the amount of token to swap, positive if exactIn, negative if exactOut
+    /// @param priceLimit the price limit for swaps, encoded as a sqrtX96 price
+    /// @return (token0, token1) delta
+    function swap904369BE(
+        address pool,
+        bool zeroForOne,
+        int256 amount,
+        uint256 priceLimit
+    ) external returns (int256, int256);
+
+    /// @notice swaps tokenA for tokenB
+    /// @param _tokenA the input token
+    /// @param _tokenB the output token
+    /// @param _amount input amount (tokenA)
+    /// @param _minOut the minimum output amount (tokenB), reverting if the actual output is lower
+    /// @return amount of token A in, amount of token B out
+    function swap2ExactIn41203F1D(
+        address _tokenA,
+        address _tokenB,
+        uint256 _amount,
+        uint256 _minOut
+    ) external returns (uint256, uint256);``` these functions would delegatecall to those functions
+
+{Reactions}
+👍 (3) 
+
+[08/28/2024 06:56] outsideframe.
+is anyone else getting a error downloading object regarding git lfs when cloning the project?
+
+
+[08/28/2024 13:35] 0xaleko
+@bayge I need help with project building. 
+
+I'm trying to build docker. I m not new in using stylus & rust. 
+Have you setup for M1 mac users?
+
+
+[08/28/2024 13:45] 0xaleko
+```docker
+CARGO_BUILD_STYLUS := \
+    cargo +nightly build \
+        -Z build-std=std,panic_abort \
+        -Z build-std-features=panic_immediate_abort \
+        -Z unstable-options \
+        --release \
+        --target wasm32-unknown-unknown \
+        --artifact-dir . \
+        --package
+
+FORGE_BUILD := forge build
+DOCKER_BUILD := docker build
+```
+
+
+[08/28/2024 13:45] 0xaleko
+```console
+❯ make
+find: illegal option -- p
+usage: find [-H | -L | -P] [-EXdsx] [-f path] path ... [expression]
+       find [-H | -L | -P] [-EXdsx] -f path [path ...] [expression]
+find: illegal option -- p
+usage: find [-H | -L | -P] [-EXdsx] [-f path] path ... [expression]
+       find [-H | -L | -P] [-EXdsx] -f path [path ...] [expression]
+error: no such command: `+nightly`
+
+        Cargo does not handle `+toolchain` directives.
+        Did you mean to invoke `cargo` through `rustup` instead?
+make: *** [seawater-admin.wasm] Error 101
+```
+
+
+[08/28/2024 13:55] bayge
+your problem is that you have the BSD version of Make, when you need the gnu version 🙂 my advice would be to install gnu make using (going off memory here, bare with me) `brew install findutils`
+
+
+[08/28/2024 13:56] bayge
+then to set up your path in a way that a gnu find alias has priority. also idk about your cargo... did you install it using rustup?
+
+
+[08/28/2024 13:56] bayge
+this is unfortunately an issue that codearena are aware of. i can't pull the repo myself to resolve this issue. tagging the team for visibility...
+
+
+[08/28/2024 13:56] bayge
+@kartoonjoy | C4🎇🎇
+
+{Reactions}
+empathy 
+
+[08/28/2024 13:57] bayge
+try using the zip download feature that you can get through github
+
+
+[08/28/2024 14:01] 0xaleko
+I used brew for install
+
+
+[08/28/2024 14:01] bayge
+try using rustup instead and remove what you installed using brew
+
+
+[08/28/2024 15:57] bozwkd
+@bayge What values should these environment variables take?
+
+{Attachments}
+Code4rena - ARCHIVE-PUBLIC - superposition-aug23 [1269057494437728327].txt_Files/image-761DC.png
+
+
+[08/28/2024 16:12] 0xaleko
+same error
+
+
+[08/29/2024 00:38] bayge
+you could set these to whatever address you want if you're building the code without testing
+
+
+[08/29/2024 11:07] bozwkd
+so much errors
+
+{Attachments}
+Code4rena - ARCHIVE-PUBLIC - superposition-aug23 [1269057494437728327].txt_Files/image-BDEF9.png
+
+
+[08/29/2024 11:08] bozwkd
+Can you give more information on how to build it correctly?
+
+
+[08/30/2024 00:40] bayge
+leo isn't related to seawater! 🙂 you need to test exclusively seawater
+
+
+[08/30/2024 00:40] bayge
+try using `make seawater`
+
+
+[08/30/2024 00:42] bayge (pinned)
+hey everyone, if you experience issues with `make build`: use `make seawater` to build longtail exclusively!
+
+
+[08/30/2024 00:42] bayge
+@kartoonjoy | C4🎇🎇 could we pin this? 🙂
+
+
+[08/30/2024 00:45] kartoonjoy
+Pinned a message.
+
+{Reactions}
+❤️ 
+
+[09/02/2024 15:41] prapandey031
+Hi @bayge 
+I want your help with the following:
+
+1) The AMM uses a diamond proxy pattern. I assume that the main entry point for the users would be the SeawaterAMM.sol proxy. It would then delegate to different facets, separated as "features" in seawater/src/lib.rs. Am I right?
+
+2) The Readme states that the liquidity is centralised in one contract. I believe it is the SeawaterAMM.sol proxy contract. Moreover, the "pools" mapping (LOC-109) in seawater/src/lib.rs maps from the token address to its pool info. Basically, there's no separate contract for a different pool. Am I right?
+
+Pls confirm
+
+
+[09/02/2024 16:45] mangoeth
+Where do i find the addresses for these contracts?
+
+{Attachments}
+Code4rena - ARCHIVE-PUBLIC - superposition-aug23 [1269057494437728327].txt_Files/image-928BE.png
+
+
+[09/03/2024 02:36] prapandey031
+Perhaps this would help:
+
+https://docs.long.so/#useful-testing-token-deployments
+
+{Embed}
+https://docs.long.so/
+Home - Longtail AMM contracts docs
+
+
+[09/03/2024 02:54] bayge
+you shouldn't need to set these. you don't need to actually build the contract. but you could set that to whatever you want unless you're making a deployment
+
+
+[09/03/2024 02:55] bayge
+`FLU_SEAWATER_FUSDC_ADDR` is a simple ERC20 and can be any ERC20. `PERMIT2_ADDR` is uniswap's permit2 contract
+
+
+[09/03/2024 02:56] bayge
+1. that's correct. there are no extra contracts for pools. and the feature flag controls which implementation is built as wasm. 2. and yep that's correct 🙂
+
+{Reactions}
+👍 (2) 
+
+[09/03/2024 02:57] bayge
+https://github.com/fluidity-money/long.so/blob/development/pkg/Makefile#L72 when an implementation is built based on the feature flag given, eventually the Makefile is used to rename it to the wasm specific to the feature
+
+
+[09/03/2024 03:46] prapandey031
+I see. Thank you
+
+{Reactions}
+👍 
+
+[09/09/2024 13:09] prapandey031
+I could not find this test in the contest repo:
+
+"ethers_suite_uniswap_orchestrated_uniswap_two"
+
+Could you please help @bayge
+
+
+[09/11/2024 00:17] prapandey031
+I hope everything's fine. 
+@bayge has not answered for a long time.
+
+@kartoonjoy | C4🎇🎇 could you please take a look?
+
+
+[09/11/2024 00:17] bayge
+hello. i'm still here!
+
+{Reactions}
+👍 thankyou 
+
+[09/11/2024 00:18] bayge
+your question i just haven't gotten back to yet. the missing testsuite if it's not there i can't comment
+
+
+[09/11/2024 00:19] prapandey031
+It seems it is not there in the repo except the readme
+
+
+[09/11/2024 00:19] bayge
+maybe that's a mistake then
+
+
+[09/11/2024 00:20] prapandey031
+You could provide more info about what that function want to achieve and the portion of the codebase that function tests
+
+
+[09/11/2024 00:22] prapandey031
+Moreover, it would be helpful if you could go through the private threads
+
+
+[09/11/2024 00:23] bayge
+i've been going through the private threads. your question i can't get to immediately
+
+
+[09/11/2024 00:23] bayge
+if there's a missing test it might be a mistake. i can hunt around to find it
+
+{Reactions}
+👍 
+
+[09/11/2024 06:38] decap1703
+https://github.com/code-423n4/2024-08-superposition/blob/4528c9d2dbe1550d2660dac903a8246076044905/pkg/seawater/tests/lib.rs#L692
+
+{Embed}
+https://github.com/code-423n4/2024-08-superposition/blob/4528c9d2dbe1550d2660dac903a8246076044905/pkg/seawater/tests/lib.rs
+2024-08-superposition/pkg/seawater/tests/lib.rs at 4528c9d2dbe1550d...
+Contribute to code-423n4/2024-08-superposition development by creating an account on GitHub.
+Code4rena - ARCHIVE-PUBLIC - superposition-aug23 [1269057494437728327].txt_Files/9ccd56ad-107b-4841-9f4e-02f8195734c9-97D78
+
+
+[09/11/2024 09:48] prapandey031
+Thanks man
+I understand the issue now. The test function name is different than what's mentioned in the readme
+
+
+[09/11/2024 09:48] prapandey031
+This is why github search won't show this
+
+
+[09/11/2024 10:33] bayge
+great!
+
+
+[09/13/2024 20:02] C4
+**🚨 AUDIT ALERT**
+
+@🐺Wardens The **Superposition** audit is now closed! Huge thanks to everyone who participated 🔍, whether you submitted a finding or not.
+
+What's next: The sponsor team and judge will review the findings over the next couple of weeks. Feel free to ping a Civics-Admin if you have questions along the way!
+
+
+[09/13/2024 20:04] 4gontuk
+ggs
+
+
+[09/13/2024 20:04] prapandey031
+Thank you @bayge for all the help during the contest
+
+
+[09/16/2024 00:23] bayge
+thanks everyone who participated in our contest! 🙂
+
+{Reactions}
+❤️ (17) 🫡 (2) 👑 
+
+[09/22/2024 11:11] rust_guyy
+👀
+
+
+[10/08/2024 04:02] shubh0412
+Logo has appeared on profile :hi5:
+
+{Reactions}
+🖖 (2) 
+
+[10/08/2024 06:56] izuman
+Will the results be released before the upcoming audit or is that a different set of contracts than this one?
+
+
+[10/08/2024 20:48] thebrittfactor
+🤑 🎉  Awards for **Superposition**:
+
+$8,425.45 USDC » @DadeKuma 
+$8,240.87 USDC » @oakcobalt 
+$2,459.39 USDC » @Testerbot 
+$2,417.73 USDC » @prapandey031 
+$2,345.20 USDC » @zhaojohnson 
+$2,117.66 USDC » wasm_it (@rustguy and @0xrex) 
+$1,982.62 USDC » @adeolu 
+$1,980.99 USDC » @13u9 
+$1,773.12 USDC » @ZanyBonzy 
+$1,706.84 USDC » @Tricko 
+$1,645.72 USDC » SBSecurity (@blckhv and @Slavcheww) 
+$1,013.70 USDC » @shaflow2 
+$497.96 USDC » @Q7 
+$417.76 USDC » @Silvermist 
+$357.03 USDC » mashbust (@isamjay, @gulDozer, @0xabdullah and @usmanhero) 
+$308.47 USDC » @d4r3d3v1l 
+$308.47 USDC » @eta 
+$291.97 USDC » @peanuts 
+$234.55 USDC » @aldarion 
+$233.96 USDC » @pipidu83 
+$209.87 USDC » @0xhashiman 
+$184.39 USDC » @Nikki 
+$183.77 USDC » @nnez 
+$178.86 USDC » @OKOMO 
+$176.97 USDC » @nslavchev 
+$160.75 USDC » @Japy69 
+$140.92 USDC » @devival 
+$124.91 USDC » @SpicyMeatball 
+$123.65 USDC » @IzuMan 
+$123.65 USDC » @Shubham 
+$65.01 USDC » @ABAIKUNANBAEV 
+$36.06 USDC » @Rhaydden 
+$18.51 USDC » @Rare_one 
+$1.26 USDC » @0xAleko 
+$1.26 USDC » @0xAstronatey 
+$1.26 USDC » @Agontuk 
+$1.26 USDC » @Bauchibred 
+$1.26 USDC » @Decap 
+$1.26 USDC » NexusAudits (@cheatc0d3 and @zanna) 
+$1.26 USDC » @Sparrow 
+$1.26 USDC » @Tigerfrake 
+$1.26 USDC » @debo 
+$1.26 USDC » @swapnaliss 
+$0.63 USDC » @Alex Zhang 
+
+🏁 Findings summary
+------------------------------------
+
+{Reactions}
+🚀 (7) 🙌 (3) 🎉 (4) 🔥 (3) hi5 (3) 
+
+[10/08/2024 20:49] thebrittfactor
+7 High risk findings
+12 Med risk findings
+65 wardens contributed
+
+Top Hunter: oakcobalt
+Top Gatherer: DadeKuma
+Top QA report: ZanyBonzy
+
+Awards will be distributed on Polygon within the next week. Congratulations all!  💸 💸 💸
+
+⚠️ Awardees, be sure to review [this announcement](https://discord.com/channels/810916927919620096/810929015509483554/1272625452909072415) and fill in your tax info if you haven't already. This must be completed within 30 days (i.e. before Friday, 08 November 2024 21:50) to receive your award distribution for this audit.
+
+*Note: If you participated in this audit and don’t see your name on this list, please wait until the report is published and the findings repo is made public to check on your submissions.*
+
+
+[10/08/2024 20:51] blckhv
+thanks for the amazing judging, bright times ahead 🤞
+
+
+[10/08/2024 22:10] haxatron1
+Congrats @0xrex and @rustguy
+
+{Reactions}
+❤️ (4) 
+
+[10/23/2024 21:01] itsmetechjay
+ℹ️ This channel is pending archive.   As a result, any private threads will be permanently deleted on Friday, 01 November 2024. Please make sure to grab anything you might need before then.
+
+
+[10/31/2024 20:13] itsmetechjay
+ℹ️ Reminder: this channel will be deleted after 24 hours.
+
+
+==============================================================
+Exported 72 message(s)
+==============================================================
